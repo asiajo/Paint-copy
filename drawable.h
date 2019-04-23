@@ -18,7 +18,7 @@ public:
     virtual void startDraw(QPainter &painter) = 0;
     virtual void dragDraw(QPainter &painter) = 0;
     virtual void stopDraw(QPainter &painter) = 0;
-    virtual void updatePosition(const QPoint &toPoint) = 0;
+    virtual void updatePosition(const QPoint &toPoint);
     virtual void startDrawing();
     virtual void stopDrawing();
 protected:

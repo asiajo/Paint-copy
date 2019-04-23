@@ -1,15 +1,11 @@
-#ifndef LINE_H
-#define LINE_H
-
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
 
 #include "drawable.h"
-#include <QLine>
-#include <QPoint>
 
 namespace Paint
 {
-
-class Line : public Drawable
+class Rectangle : public Drawable
 {
 public:
 
@@ -18,6 +14,5 @@ public:
     virtual void stopDraw(QPainter &painter) override;
 };
 
-} //namespace Paint
-
-#endif // LINE_H
+} // namespace Paint
+#endif // RECTANGLE_H

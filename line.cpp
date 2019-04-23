@@ -1,8 +1,7 @@
 #include "line.h"
 
-#include "line.h"
-
-namespace Paint {
+namespace Paint
+{
 
 void Line::startDraw(QPainter &painter)
 {
@@ -18,12 +17,5 @@ void Line::stopDraw(QPainter &painter)
     painter.drawLine(start, end);
 }
 
-void Line::updatePosition(const QPoint &toPoint)
-{
-    if (start.isNull())
-        start = toPoint;
-    if (end.isNull())
-        end = toPoint;
-}
 
 } // namespace Paint

@@ -1,15 +1,12 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef ELLIPSE_H
+#define ELLIPSE_H
 
 
 #include "drawable.h"
-#include <QLine>
-#include <QPoint>
 
 namespace Paint
 {
-
-class Line : public Drawable
+class Ellipse : public Drawable
 {
 public:
 
@@ -18,6 +15,5 @@ public:
     virtual void stopDraw(QPainter &painter) override;
 };
 
-} //namespace Paint
-
-#endif // LINE_H
+} // namespace Paint
+#endif // ELLIPSE_H

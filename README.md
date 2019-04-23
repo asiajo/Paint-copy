@@ -9,8 +9,10 @@ Project is based on paint example from <a href="https://doc.qt.io/qt-5/qtwidgets
 - [x] implement free drawing
 - [x] implement drawing lines
 - [ ] implement displaying temporary line while drawing and dragging
-- [ ] implement drawing rectangles
-- [ ] implement drawing ellipses
+- [x] implement drawing rectangles
+- [ ] implement displaying temporary rectangle while drawing and dragging
+- [x] implement drawing ellipses
+- [ ] implement displaying temporary ellipse while drawing and dragging
 - [ ] implement filling
 - [ ] implement undoing
 - [ ] implement redoing
@@ -20,3 +22,5 @@ Project is based on paint example from <a href="https://doc.qt.io/qt-5/qtwidgets
 <p align="center">
 <br>
   <img src="https://user-images.githubusercontent.com/25400249/56581582-8f696800-65d5-11e9-991b-1546416bde24.png" width="450"/>
+
+

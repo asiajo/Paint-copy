@@ -8,6 +8,8 @@
 #include "scribblearea.h"
 #include "scribble.h"
 #include "line.h"
+#include "rectangle.h"
+#include "ellipse.h"
 
 namespace Ui
 {

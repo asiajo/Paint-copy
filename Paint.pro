@@ -29,14 +29,18 @@ SOURCES += \
     scribblearea.cpp \
     drawable.cpp \
     scribble.cpp \
-    line.cpp
+    line.cpp \
+    rectangle.cpp \
+    ellipse.cpp
 
 HEADERS += \
         paint.h \
     scribblearea.h \
     drawable.h \
     scribble.h \
-    line.h
+    line.h \
+    rectangle.h \
+    ellipse.h
 
 FORMS += \
         paint.ui

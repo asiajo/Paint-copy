@@ -180,12 +180,15 @@ void Paint::on_actionLine_triggered()
 
 void Paint::on_actionRectangle_triggered()
 {
+    currentDrawable = std::make_shared<Rectangle>();
+    scribbleArea -> setDrawable(std::move(currentDrawable));
 
 }
 
 void Paint::on_actionElipse_triggered()
 {
-
+    currentDrawable = std::make_shared<Ellipse>();
+    scribbleArea -> setDrawable(std::move(currentDrawable));
 }
 
 void Paint::on_actionFill_triggered()
