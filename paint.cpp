@@ -174,7 +174,8 @@ void Paint::on_actionPen_triggered()
 
 void Paint::on_actionLine_triggered()
 {
-
+    currentDrawable = std::make_shared<Line>();
+    scribbleArea -> setDrawable(std::move(currentDrawable));
 }
 
 void Paint::on_actionRectangle_triggered()

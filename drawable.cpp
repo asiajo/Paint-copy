@@ -5,12 +5,15 @@ namespace Paint
 
 void Drawable::startDrawing()
 {
-    drawing = true;
+    start.setX(0);
+    start.setY(0);
 }
 
 void Drawable::stopDrawing()
 {
-    drawing = false;
+    end.setX(0);
+    end.setY(0);
+
 }
 
 } // namespace Paint

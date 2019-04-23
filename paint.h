@@ -7,6 +7,7 @@
 #include <functional>
 #include "scribblearea.h"
 #include "scribble.h"
+#include "line.h"
 
 namespace Ui
 {

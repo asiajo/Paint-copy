@@ -66,34 +66,44 @@ void ScribbleArea::clearImage()
 
 void ScribbleArea::mousePressEvent(QMouseEvent *event)
 {
-
+    if (event->button() == Qt::LeftButton)
+    {
+        scribble = true;
     modified = true;
     painter.begin(&image);
     painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
                         Qt::RoundJoin));
     if(!_drawable)
         _drawable = std::make_shared<Scribble>();
-    if (event->button() == Qt::LeftButton)
-    {
-        _drawable -> startDrawing();
-        _drawable -> updatePosition(event->pos());
-        _drawable -> draw(painter);
-        repaint();
+
+    _drawable -> startDrawing();
+    _drawable -> updatePosition(event->pos());
+    _drawable -> startDraw(painter);
+    repaint();
     }
 }
 
 void ScribbleArea::mouseMoveEvent(QMouseEvent *event)
 {
-    _drawable ->updatePosition(event->pos());
-    _drawable -> draw(painter);
+    if(scribble)
+    {
+    _drawable -> updatePosition(event->pos());
+    _drawable -> dragDraw(painter);
     repaint();
+    }
 }
 
 void ScribbleArea::mouseReleaseEvent(QMouseEvent *event)
 {
+    if(scribble)
+    {
     _drawable -> stopDrawing();
     _drawable -> updatePosition(event->pos());
+    _drawable -> stopDraw(painter);
+    repaint();
     painter.end();
+    scribble = false;
+    }
 }
 
 void ScribbleArea::paintEvent(QPaintEvent *event)

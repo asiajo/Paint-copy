@@ -15,12 +15,15 @@ class Drawable
 {
 public:
     virtual ~Drawable() = default;
-    virtual void draw(QPainter &painter) = 0;
+    virtual void startDraw(QPainter &painter) = 0;
+    virtual void dragDraw(QPainter &painter) = 0;
+    virtual void stopDraw(QPainter &painter) = 0;
     virtual void updatePosition(const QPoint &toPoint) = 0;
-    void startDrawing();
-    void stopDrawing();
+    virtual void startDrawing();
+    virtual void stopDrawing();
 protected:
-    bool drawing = false;
+    QPoint start;
+    QPoint end;
 };
 
 } // namespace Paint

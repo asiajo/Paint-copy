@@ -48,6 +48,7 @@ private:
     void resizeImage(QImage *image, const QSize &newSize);
 
     bool modified = false;
+    bool scribble = false;
     int myPenWidth;
     QColor myPenColor;
     QImage image;
