@@ -8,7 +8,8 @@
 #include <QInputDialog>
 #include <QColorDialog>
 
-namespace Paint {
+namespace Paint
+{
 Paint::Paint(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Paint)
@@ -23,6 +24,25 @@ Paint::Paint(QWidget *parent) :
 Paint::~Paint()
 {
     delete ui;
+}
+
+void Paint::closeEvent (QCloseEvent *event)
+{
+    if (maybeSave())
+        event-> accept();
+    else
+        event->ignore();
+}
+
+void Paint::on_actionNew_triggered()
+{
+    if(maybeSave())
+    {
+        scribbleArea -> clearImage();
+        filename = "";
+        fileFormat = "";
+    }
+    setWindowTitle(tr("%1[*] - %2").arg("New File", QCoreApplication::applicationName()));
 }
 
 void Paint::on_actionOpen_triggered()
@@ -46,6 +66,48 @@ void Paint::on_actionSave_triggered()
         fileFormat = "png";
         Save_As();
     }
+}
+
+void Paint::on_actionjpg_triggered()
+{
+    fileFormat = "jpg";
+    Save_As();
+}
+
+void Paint::on_actionpng_triggered()
+{
+    fileFormat = "png";
+    Save_As();
+}
+
+void Paint::on_actionbmp_triggered()
+{
+    fileFormat = "bmp";
+    Save_As();
+}
+
+bool Paint::maybeSave()
+{
+    if (scribbleArea->isModified())
+    {
+       QMessageBox::StandardButton warn = QMessageBox::warning(this, tr("Save?"),
+                          tr("The image has been modified.\n"
+                             "Do you want to save your changes?"),
+                          QMessageBox::Save | QMessageBox::Discard
+                          | QMessageBox::Cancel);
+
+        if (warn == QMessageBox::Save)
+        {
+            if(!filename.isEmpty())
+                on_actionSave_triggered();
+            else
+                on_actionpng_triggered();
+            return true;
+        }
+        else if (warn == QMessageBox::Cancel)
+            return false;
+    }
+    return true;
 }
 
 bool Paint::Save_As()
@@ -75,13 +137,6 @@ void Paint::on_actionExit_triggered()
         QApplication::quit();
 }
 
-void Paint::closeEvent (QCloseEvent *event)
-{
-    if (maybeSave())
-        event-> accept();
-    else
-        event->ignore();
-}
 
 void Paint::on_actionUndo_triggered()
 {
@@ -111,57 +166,30 @@ void Paint::on_actionSet_Pen_Color_triggered()
         scribbleArea->setPenColor(newColor);
 }
 
-bool Paint::maybeSave()
+void Paint::on_actionPen_triggered()
 {
-    if (scribbleArea->isModified())
-    {
-       QMessageBox::StandardButton warn = QMessageBox::warning(this, tr("Save?"),
-                          tr("The image has been modified.\n"
-                             "Do you want to save your changes?"),
-                          QMessageBox::Save | QMessageBox::Discard
-                          | QMessageBox::Cancel);
-
-        if (warn == QMessageBox::Save)
-        {
-            if(!filename.isEmpty())
-                on_actionSave_triggered();
-            else
-                on_actionpng_triggered();
-            return true;
-        }
-        else if (warn == QMessageBox::Cancel)
-            return false;
-    }
-    return true;
+    currentDrawable = std::make_shared<Scribble>();
+    scribbleArea -> setDrawable(std::move(currentDrawable));
 }
 
-void Paint::on_actionjpg_triggered()
+void Paint::on_actionLine_triggered()
 {
-    fileFormat = "jpg";
-    Save_As();
+
 }
 
-void Paint::on_actionpng_triggered()
+void Paint::on_actionRectangle_triggered()
 {
-    fileFormat = "png";
-    Save_As();
+
 }
 
-void Paint::on_actionbmp_triggered()
+void Paint::on_actionElipse_triggered()
 {
-    fileFormat = "bmp";
-    Save_As();
+
 }
 
-void Paint::on_actionNew_triggered()
+void Paint::on_actionFill_triggered()
 {
-    if(maybeSave())
-    {
-        scribbleArea -> clearImage();
-        filename = "";
-        fileFormat = "";
-    }
-    setWindowTitle(tr("%1[*] - %2").arg("New File", QCoreApplication::applicationName()));
+
 }
 
 void Paint::on_actionAbout_triggered()
@@ -170,28 +198,4 @@ void Paint::on_actionAbout_triggered()
                                                                 QMessageBox::Ok);
 }
 
-void Paint::on_actionPen_triggered()
-{
-    scribbleArea -> enableDrawPen();
-}
-
-void Paint::on_actionLine_triggered()
-{
-    scribbleArea -> enableDrawLine();
-}
-
-void Paint::on_actionRectangle_triggered()
-{
-    scribbleArea -> enableDrawRectangle();
-}
-
-void Paint::on_actionElipse_triggered()
-{
-    scribbleArea -> enableDrawCircle();
-}
-
-void Paint::on_actionFill_triggered()
-{
-    scribbleArea -> enableFill();
-}
 } // namespace Paint

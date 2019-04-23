@@ -1,7 +1,8 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-namespace Paint {
+namespace Paint
+{
 enum class Action
 {
     PEN,

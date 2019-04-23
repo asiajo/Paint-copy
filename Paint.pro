@@ -27,11 +27,14 @@ SOURCES += \
         main.cpp \
         paint.cpp \
     scribblearea.cpp \
+    drawable.cpp \
+    scribble.cpp
 
 HEADERS += \
         paint.h \
     scribblearea.h \
-    action.h \
+    drawable.h \
+    scribble.h
 
 FORMS += \
         paint.ui

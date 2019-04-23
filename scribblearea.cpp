@@ -9,18 +9,14 @@
 
 #include "scribblearea.h"
 
-namespace Paint {
-ScribbleArea::ScribbleArea(QWidget *parent)
-    : QWidget(parent)
+namespace Paint
 {
-    setAttribute(Qt::WA_StaticContents);
-
-    modified = false;
-    scribbling = false;
-    myPenWidth = 3;
-    myPenColor = Qt::black;
-    currentAction = Action::PEN;
+ScribbleArea::ScribbleArea(QWidget *parent)
+    : QWidget(parent), myPenWidth(3), myPenColor(Qt::black)
+{
+    setAttribute(Qt::WA_StaticContents);  
 }
+
 
 bool ScribbleArea::openImage(const QString &fileName)
 {
@@ -64,41 +60,39 @@ void ScribbleArea::setPenWidth(int newWidth)
 void ScribbleArea::clearImage()
 {
     image.fill(qRgb(255, 255, 255));
-    modified = true;
+    modified = false;
     update();
 }
 
 void ScribbleArea::mousePressEvent(QMouseEvent *event)
 {
+
+    modified = true;
     painter.begin(&image);
     painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
                         Qt::RoundJoin));
-    actualStartPoint = event->pos();
-    if(currentAction == Action :: PEN)
-        if (event->button() == Qt::LeftButton)
-            scribbling = true;
+    if(!_drawable)
+        _drawable = std::make_shared<Scribble>();
+    if (event->button() == Qt::LeftButton)
+    {
+        _drawable -> startDrawing();
+        _drawable -> updatePosition(event->pos());
+        _drawable -> draw(painter);
+        repaint();
+    }
 }
 
 void ScribbleArea::mouseMoveEvent(QMouseEvent *event)
 {
-    if(currentAction == Action :: PEN)
-        if ((event->buttons() & Qt::LeftButton) && scribbling)
-            drawPen(event->pos());
+    _drawable ->updatePosition(event->pos());
+    _drawable -> draw(painter);
+    repaint();
 }
 
 void ScribbleArea::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(currentAction == Action :: PEN)
-        if (event->button() == Qt::LeftButton && scribbling)
-        {
-            drawPen(event->pos());
-            scribbling = false;
-        }
-    if(currentAction == Action :: LINE)
-        drawScribbleLine(event->pos());
-    int rad = (myPenWidth / 2) + 2;
-    update(QRect(actualStartPoint, event->pos()).normalized()
-                                     .adjusted(-rad, -rad, +rad, +rad));
+    _drawable -> stopDrawing();
+    _drawable -> updatePosition(event->pos());
     painter.end();
 }
 
@@ -133,26 +127,6 @@ void ScribbleArea::resizeImage(QImage *image, const QSize &newSize)
     *image = newImage;
 }
 
-void ScribbleArea::drawPen(const QPoint &endPoint)
-{
-    painter.drawLine(actualStartPoint, endPoint);
-    modified = true;
-    int rad = (myPenWidth / 2) + 2;
-    update(QRect(actualStartPoint, endPoint).normalized()
-                                     .adjusted(-rad, -rad, +rad, +rad));
-    actualStartPoint = endPoint;
-}
-
-void ScribbleArea::drawScribbleLine(const QPoint &endPoint)
-{
-    painter.drawLine(actualStartPoint, endPoint);
-    modified = true;
-}
-
-void ScribbleArea::drawCircle(const QPoint &endPoint){}
-void ScribbleArea::drawRectangle(const QPoint &endPoint){}
-void ScribbleArea::fill(QMouseEvent *event){}
-
 void ScribbleArea::print()
 {
 #if QT_CONFIG(printdialog)
@@ -171,25 +145,9 @@ void ScribbleArea::print()
 #endif // QT_CONFIG(printdialog)
 }
 
-void ScribbleArea::enableDrawPen()
+void ScribbleArea::setDrawable(drawableType drawable)
 {
-    currentAction = Action :: PEN;
-}
-void ScribbleArea::enableDrawLine()
-{
-    currentAction = Action :: LINE;
-}
-void ScribbleArea::enableDrawCircle()
-{
-    currentAction = Action :: CIRCLE;
-}
-void ScribbleArea::enableDrawRectangle()
-{
-    currentAction = Action :: RECTANGLE;
-}
-void ScribbleArea::enableFill()
-{
-    currentAction = Action :: FILL;
+    _drawable = drawable;
 }
 
 } // namespace Paint
